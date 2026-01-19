@@ -2,17 +2,6 @@
 CREATE EXTENSION IF NOT EXISTS "vector";
 
 -- CreateTable
-CREATE TABLE "file" (
-    "id" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "is_folder" BOOLEAN NOT NULL DEFAULT false,
-    "path" TEXT NOT NULL,
-
-    CONSTRAINT "file_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "user" (
     "id" TEXT NOT NULL,
     "name" TEXT,
@@ -75,9 +64,6 @@ CREATE TABLE "authenticator" (
 
     CONSTRAINT "authenticator_pkey" PRIMARY KEY ("user_id","credential_id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "file_path_key" ON "file"("path");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
