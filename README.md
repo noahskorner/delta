@@ -1,177 +1,99 @@
-## Overview
+# 🛠️ delta - The greatest collaboration tool ever created
 
-Build a lightweight, AI-powered education platform where users can discover or generate courses composed of structured learning assets and complete them with measurable progress and feedback.
-
----
-
-## Functional Scope
-
-### 1. Users & Profiles
-
-- Email / OAuth sign up & sign in (Supabase Auth)
-- Public profile:
-  - Username (unique)
-  - Avatar upload (Supabase Storage)
-  - Bio (optional)
-- View other users’ public profiles
-- Follow / bookmark creators _(optional but recommended for discovery)_
+Welcome to **delta**, a modern Turborepo‑powered monorepo featuring Next.js 14, shadcn/ui, Prisma, and a Postgres (pgvector‑enabled) database. Built for rapid prototyping **and** production‑grade scaling.
 
 ---
 
-### 2. Assets (Learning Units)
+## 📁 Project Structure
 
-Assets are atomic content blocks tied to courses.
-
-**Supported Asset Types**
-
-1. Lecture (video or AI-generated outline)
-2. Reading (links, uploaded docs, summaries)
-3. Exercise (MCQ, short answer, coding, reflection)
-4. Assignment / Project
-5. Discussion Prompt
-6. Quiz / Assessment
-7. Feedback Request
-8. Office Hours / Support Note
-9. Milestone / Checkpoint
-10. Final Evaluation
-
-**Capabilities**
-
-- Manual asset creation
-- Import from:
-  - YouTube
-  - URLs (articles, blogs, research)
-  - Uploaded PDFs/docs
-- AI enrichment:
-  - Summaries
-  - Key concepts
-  - Difficulty tagging
-  - Estimated completion time
-- Community searchable asset library
-- Tagging + subject categorization
-- Asset reuse across multiple courses
+```
+delta
+│  .node-version             # Node LTS pin
+│  docker-compose.yml        # Postgres + pgvector service
+│  turbo.json                # Turborepo pipeline
+│  .env.example              # Environment template
+│  setup.sh                  # Scaffolding script
+│  README.md                 # You are here
+├─ apps/
+│   └─ next/                 # Next.js 14 App Router frontend
+└─ packages/
+└─ database/             # Prisma schema & generated client
+```
 
 ---
 
-### 3. Courses
+## 🚀 Quick Start
 
-**Discovery**
+```bash
+# 1. Clone & install deps
+$ git clone <repo-url> && cd $PROJECT_NAME
+$ npm install
 
-- Browse public community courses
-- Filter by subject, difficulty, popularity, duration
+# 2. Spin up Postgres (pgvector)
+$ docker compose up -d
 
-**Creation**
+# 3. Apply Prisma migrations & generate client
+$ npx prisma migrate dev --name init
+$ npx prisma generate
 
-- Create course manually OR via AI Course Builder
-- Course metadata:
-  - Title
-  - Subject
-  - Description
-  - Level (Beginner → Advanced)
-  - Estimated duration
-  - Visibility (Public / Private)
+# 4. Start turbo dev pipeline (Next.js + prisma watches)
+$ npm run dev
+```
 
-**AI Syllabus & Asset Generation**
-
-- Chat-driven course generator (LLM)
-- User specifies:
-  - Length
-  - Depth
-  - Focus areas
-  - Learning style
-- LLM generates:
-  - Structured syllabus
-  - All required asset types
-  - Exercises + solutions
-  - Final evaluation
-- Assets saved directly to DB via structured output schema
+> **Tip:** Turborepo caches builds between runs. If things get weird, `rm -rf .turbo`.
 
 ---
 
-### 4. Learning & Progress
+## 📚 API Docs with Scalar
 
-- Enroll in courses
-- Track:
-  - Completed assets
-  - Scores
-  - Milestone progress
-  - Time spent _(optional)_
-- Interactive exercises:
-  - MCQ auto-graded
-  - Free response graded by LLM
-- AI Feedback Engine:
-  - Conceptual critique
-  - Improvement suggestions
-  - Encouragement based on performance
-- Course completion state:
-  - Active
-  - Completed
-  - Archived
-  - Dropped
+- Runs in **watch** mode via `npm run docs` **inside** `apps/next`.
+- Open [http://localhost:5001](http://localhost:5001) (default) to browse the live OpenAPI UI.
+- The OpenAPI spec lives at `apps/next/app/api/schema.yaml` – commit it.
 
 ---
 
-### 5. AI Grading (Subjective)
+## 🔄 Development Workflow
 
-- LLM evaluates:
-  - Written answers
-  - Project summaries
-  - Reflections
-- Returns structured feedback:
-  - Strengths
-  - Weaknesses
-  - Suggestions
-  - Concept gaps
-- Score is secondary; qualitative feedback prioritized
+| Command (root)  | What it does                                            |
+| --------------- | ------------------------------------------------------- |
+| `npm run dev`   | Turbo runs `next dev` + watches Prisma & other packages |
+| `npm run build` | Builds all apps & packages                              |
+| `npm run lint`  | Runs ESLint across the monorepo                         |
 
----
+### Adding Packages / Apps
 
-### 6. Motivation & Gamification
+```bash
+# New package
+$ turbo gen package my-lib                # or mkdir packages/my-lib
 
-- XP per asset completed
-- Coins for:
-  - Course completion
-  - Streaks
-  - High quiz scores
-- Badges:
-  - Subject mastery
-  - Course creator
-  - Consistency streaks
-- Leaderboard _(optional future phase)_
+# New Next.js app
+$ npx create-next-app apps/docs --app --no-src-dir --use-npm
+```
+
+Remember to update the **workspaces** array in `package.json` if you add paths outside `apps/*` or `packages/*`.
 
 ---
 
-## Recommended Additions (Missing but Important)
+## 🤝 Contributing
 
-- Course ratings & reviews
-- Save / favorite courses
-- Recently viewed
-- Creator attribution on AI-generated courses
-- Difficulty progression system
-- Daily learning streak tracking
-- Admin moderation for public assets/courses
+1. Fork & clone
+2. `npm install`
+3. Follow **Quick Start** above
+4. Create feature branch (`git checkout -b feat/my-thing`)
+5. Commit granular, meaningful changes
+6. Push & open a PR targeting **main**
 
----
+### Troubleshooting Cheatsheet
 
-## Non-Functional
-
-- Fast UI (streaming responses for AI)
-- Deterministic structured outputs for all generated assets
-- Server-side validation before persistence
-- Scalable Postgres schema (assets reused across courses)
-- Secure row-level policies in Supabase
-- Minimal friction UX
+| Symptom                 | Fix                                                      |
+| ----------------------- | -------------------------------------------------------- |
+| `prisma generate` fails | Ensure Postgres is running and `DATABASE_URL` is correct |
+| Turbo shows stale cache | `npx turbo clean` (or delete `.turbo/`)                  |
+| Next.js can’t reach DB  | Check Docker port/credentials & `.env` values            |
+| Scalar UI empty         | Regenerate spec (`npm run docs` in `apps/next`)          |
 
 ---
 
-## Summary
+## 📄 License
 
-The app enables:
-
-- Users → create profiles
-- AI → generate full structured courses
-- Community → share assets & courses
-- Learners → complete exercises and receive intelligent feedback
-- System → reward progress with gamification
-
-A focused, AI-native learning platform built for rapid course creation and engagement.
+MIT © 2025

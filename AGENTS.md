@@ -7,6 +7,7 @@ Welcome to this Turborepo-based Next.js + Prisma monorepo. Use this guide to kee
 - Root scripts orchestrate workspaces via Turborepo (`package.json`, `turbo.json`).
 - `apps/web/` holds the Next.js 15 app (app router). UI primitives live in `components/`, client utilities in `hooks/` and `lib/`, and static assets in `public/`.
 - `packages/database/` contains the Prisma schema, migrations, and generated client.
+- `FEATURES.md` is the product specification; use it as the source of truth for behavior and scope.
 - `.turbo/` and `.next/` are build caches; avoid committing them.
 
 ## Dependency Installation Rules
