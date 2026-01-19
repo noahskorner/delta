@@ -1,35 +1,29 @@
 'use client';
 
-import Link from 'next/link';
-import { useState } from 'react';
+import { BookOpen, Bot, Flame, Mail, Sparkles, Target } from 'lucide-react';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { signIn } from 'next-auth/react';
-import { ROUTES } from '@/app/routes';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { signIn } from 'next-auth/react';
+import { ROUTES } from '../routes';
 
 const schema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
 });
-
 type LoginFormSchema = z.infer<typeof schema>;
 
-export default function SignInPage() {
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
-
+export default function Login() {
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -38,105 +32,110 @@ export default function SignInPage() {
   });
 
   const onSubmit = async ({ email }: LoginFormSchema) => {
-    setSubmitError(null);
-    setSubmitSuccess(null);
-
-    const result = await signIn('email', {
-      email,
-      callbackUrl: ROUTES.dashboard.home,
-      redirect: false,
-    });
-
-    if (result?.error) {
-      setSubmitError('We could not send the magic link. Please try again.');
-      return;
-    }
-
-    setSubmitSuccess('Check your email for a sign-in link.');
+    await signIn('email', { email, callbackUrl: ROUTES.dashboard.home });
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="relative flex min-h-screen items-center justify-center px-6 py-16">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
-          <div className="absolute right-0 top-24 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl" />
+    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_20%_10%,rgba(253,186,116,0.22),transparent_42%),radial-gradient(circle_at_80%_20%,rgba(56,189,248,0.18),transparent_38%),linear-gradient(160deg,rgba(15,23,42,0.04),rgba(15,23,42,0.02))]">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(15,23,42,0.06),transparent_40%,rgba(15,23,42,0.08))]" />
+      <div className="pointer-events-none absolute right-[-10%] top-[8%] h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-[-12%] left-[6%] h-64 w-64 rounded-full bg-amber-400/10 blur-3xl" />
+
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-center gap-12 px-6 py-12 lg:flex-row lg:items-center lg:gap-16 lg:py-20">
+        <div className="flex max-w-xl flex-col gap-6 text-center lg:text-left">
+          <div className="inline-flex items-center justify-center gap-2 self-center rounded-full border border-primary/30 bg-background/70 px-4 py-2 text-sm font-medium text-primary shadow-sm lg:self-start">
+            <Sparkles className="h-4 w-4" aria-hidden />
+            AI learning studio
+          </div>
+          <h1 className="text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+            Sign in to build courses that keep learners moving.
+          </h1>
+          <p className="text-muted-foreground text-base leading-relaxed">
+            Create structured learning paths, generate assets in minutes, and measure real progress
+            with feedback that helps students improve.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="flex items-start gap-3 rounded-xl border bg-background/80 p-4 shadow-sm backdrop-blur">
+              <Bot className="mt-1 h-4 w-4 text-sky-500" aria-hidden />
+              <div>
+                <p className="text-sm font-medium text-foreground">AI course builder</p>
+                <p className="text-muted-foreground text-sm">
+                  Generate syllabi, assets, and assessments in one flow.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 rounded-xl border bg-background/80 p-4 shadow-sm backdrop-blur">
+              <Target className="mt-1 h-4 w-4 text-emerald-500" aria-hidden />
+              <div>
+                <p className="text-sm font-medium text-foreground">Milestone tracking</p>
+                <p className="text-muted-foreground text-sm">
+                  Track completion, scores, and learning streaks.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="grid gap-3 rounded-2xl border bg-background/70 p-4 text-left shadow-sm backdrop-blur">
+            <div className="flex items-center gap-3 text-sm">
+              <BookOpen className="h-4 w-4 text-primary" aria-hidden />
+              <span className="font-medium text-foreground">Your next course draft</span>
+            </div>
+            <div className="grid gap-2 text-xs text-muted-foreground">
+              <div className="flex items-center justify-between rounded-lg bg-muted/60 px-3 py-2">
+                <span>Foundations and overview</span>
+                <span className="font-medium text-foreground">15 min</span>
+              </div>
+              <div className="flex items-center justify-between rounded-lg bg-muted/60 px-3 py-2">
+                <span>Practice and guided exercise</span>
+                <span className="font-medium text-foreground">25 min</span>
+              </div>
+              <div className="flex items-center justify-between rounded-lg bg-muted/60 px-3 py-2">
+                <span>Reflection and feedback</span>
+                <span className="font-medium text-foreground">10 min</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <Card className="relative z-10 w-full max-w-lg border-border/60 bg-background/85 shadow-xl">
-          <CardHeader className="space-y-3">
-            <CardTitle className="text-2xl font-semibold">Sign in to delta</CardTitle>
-            <p className="text-sm text-muted-foreground">
-              We will email you a magic link. No password required.
-            </p>
+        <Card className="w-full max-w-md border border-border/60 bg-background/95 shadow-lg backdrop-blur">
+          <CardHeader className="space-y-2">
+            <div className="flex items-center gap-2 text-sm font-medium text-primary">
+              <Flame className="h-4 w-4" aria-hidden />
+              <span>Resume your learning streak</span>
+            </div>
+            <CardTitle className="text-2xl">Sign in</CardTitle>
+            <CardDescription className="leading-relaxed">
+              We use passwordless magic links. Enter your email to receive a secure sign-in link.
+            </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email address</FormLabel>
+                      <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
                           type="email"
                           placeholder="you@example.com"
                           autoComplete="email"
-                          inputMode="email"
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription>
-                        Use the email you want associated with your account.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
-                {submitError ? (
-                  <div
-                    className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
-                    role="alert"
-                  >
-                    {submitError}
-                  </div>
-                ) : null}
-
-                {submitSuccess ? (
-                  <div
-                    className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-700"
-                    role="status"
-                  >
-                    {submitSuccess}
-                  </div>
-                ) : null}
-
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={form.formState.isSubmitting}
-                >
-                  {form.formState.isSubmitting ? 'Sending magic link...' : 'Send magic link'}
+                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? 'Sending magic link...' : 'Email me a magic link'}
                 </Button>
               </form>
             </Form>
-
-            <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
-              <span>
-                New here?{' '}
-                <Link
-                  className="font-medium text-foreground hover:underline"
-                  href={ROUTES.signUp}
-                >
-                  Create an account
-                </Link>
-              </span>
-              <Link className="hover:underline" href={ROUTES.home}>
-                Back to home
-              </Link>
+            <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
+              <Mail className="h-3.5 w-3.5" aria-hidden />
+              Check your inbox for a one-time sign-in link.
             </div>
           </CardContent>
         </Card>

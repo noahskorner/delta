@@ -15,15 +15,5 @@ export default async function Layout({ children }: { children: React.ReactNode }
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true';
 
-  return (
-    <SidebarProvider defaultOpen={defaultOpen}>
-      <div className="w-screen h-screen overflow-hidden relative">
-        <div className="flex flex-1 w-full pt-11">
-          <main className="w-full h-[calc(100svh-2.5rem)] overflow-auto bg-sidebar">
-            {children}
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
-  );
+  return <SidebarProvider defaultOpen={defaultOpen}></SidebarProvider>;
 }
