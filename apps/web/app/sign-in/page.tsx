@@ -1,7 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
-import { Mail, ShieldCheck, Sparkles } from 'lucide-react';
+import { BookOpen, Bot, Flame, Mail, Sparkles, Target } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -38,63 +37,81 @@ export default function Login() {
     },
   });
 
-  const formDescription = useMemo(
-    () =>
-      'We use passwordless magic links to keep your workspace secure. Enter your email and we will send you a one-time sign-in link.',
-    [],
-  );
-
   const onSubmit = async ({ email }: LoginFormSchema) => {
     await signIn('email', { email, callbackUrl: ROUTES.dashboard.home });
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,0.16),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(59,130,246,0.12),transparent_30%)]">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(15,23,42,0.08),transparent,rgba(15,23,42,0.08))]" />
+    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_20%_10%,rgba(253,186,116,0.22),transparent_42%),radial-gradient(circle_at_80%_20%,rgba(56,189,248,0.18),transparent_38%),linear-gradient(160deg,rgba(15,23,42,0.04),rgba(15,23,42,0.02))]">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(15,23,42,0.06),transparent_40%,rgba(15,23,42,0.08))]" />
+      <div className="pointer-events-none absolute right-[-10%] top-[8%] h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-[-12%] left-[6%] h-64 w-64 rounded-full bg-amber-400/10 blur-3xl" />
 
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-center gap-10 px-6 py-12 lg:flex-row lg:items-center lg:py-20">
-        <div className="flex max-w-xl flex-col gap-4 text-center lg:text-left">
-          <div className="inline-flex items-center justify-center gap-2 self-center rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary lg:self-start">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-center gap-12 px-6 py-12 lg:flex-row lg:items-center lg:gap-16 lg:py-20">
+        <div className="flex max-w-xl flex-col gap-6 text-center lg:text-left">
+          <div className="inline-flex items-center justify-center gap-2 self-center rounded-full border border-primary/30 bg-background/70 px-4 py-2 text-sm font-medium text-primary shadow-sm lg:self-start">
             <Sparkles className="h-4 w-4" aria-hidden />
-            Welcome back
+            AI learning studio
           </div>
           <h1 className="text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-            Sign in to keep building momentum.
+            Sign in to build courses that keep learners moving.
           </h1>
           <p className="text-muted-foreground text-base leading-relaxed">
-            Access your projects, stay in sync with your team, and pick up right where you left
-            off. We keep your account secure with passwordless authentication.
+            Create structured learning paths, generate assets in minutes, and measure real
+            progress with feedback that helps students improve.
           </p>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex items-start gap-3 rounded-xl border bg-background/80 p-4 shadow-sm backdrop-blur">
-              <ShieldCheck className="mt-1 h-4 w-4 text-emerald-500" aria-hidden />
+              <Bot className="mt-1 h-4 w-4 text-sky-500" aria-hidden />
               <div>
-                <p className="text-sm font-medium text-foreground">Secure by default</p>
+                <p className="text-sm font-medium text-foreground">AI course builder</p>
                 <p className="text-muted-foreground text-sm">
-                  Magic links mean no passwords to leak or forget.
+                  Generate syllabi, assets, and assessments in one flow.
                 </p>
               </div>
             </div>
             <div className="flex items-start gap-3 rounded-xl border bg-background/80 p-4 shadow-sm backdrop-blur">
-              <Mail className="mt-1 h-4 w-4 text-sky-500" aria-hidden />
+              <Target className="mt-1 h-4 w-4 text-emerald-500" aria-hidden />
               <div>
-                <p className="text-sm font-medium text-foreground">Fast access</p>
+                <p className="text-sm font-medium text-foreground">Milestone tracking</p>
                 <p className="text-muted-foreground text-sm">
-                  Check your inbox and you are back to shipping.
+                  Track completion, scores, and learning streaks.
                 </p>
+              </div>
+            </div>
+          </div>
+          <div className="grid gap-3 rounded-2xl border bg-background/70 p-4 text-left shadow-sm backdrop-blur">
+            <div className="flex items-center gap-3 text-sm">
+              <BookOpen className="h-4 w-4 text-primary" aria-hidden />
+              <span className="font-medium text-foreground">Your next course draft</span>
+            </div>
+            <div className="grid gap-2 text-xs text-muted-foreground">
+              <div className="flex items-center justify-between rounded-lg bg-muted/60 px-3 py-2">
+                <span>Foundations and overview</span>
+                <span className="font-medium text-foreground">15 min</span>
+              </div>
+              <div className="flex items-center justify-between rounded-lg bg-muted/60 px-3 py-2">
+                <span>Practice and guided exercise</span>
+                <span className="font-medium text-foreground">25 min</span>
+              </div>
+              <div className="flex items-center justify-between rounded-lg bg-muted/60 px-3 py-2">
+                <span>Reflection and feedback</span>
+                <span className="font-medium text-foreground">10 min</span>
               </div>
             </div>
           </div>
         </div>
 
-        <Card className="w-full max-w-md border border-border/60 bg-background/95 backdrop-blur">
+        <Card className="w-full max-w-md border border-border/60 bg-background/95 shadow-lg backdrop-blur">
           <CardHeader className="space-y-2">
             <div className="flex items-center gap-2 text-sm font-medium text-primary">
-              <Sparkles className="h-4 w-4" aria-hidden />
-              <span>Magic link sign-in</span>
+              <Flame className="h-4 w-4" aria-hidden />
+              <span>Resume your learning streak</span>
             </div>
             <CardTitle className="text-2xl">Sign in</CardTitle>
-            <CardDescription className="leading-relaxed">{formDescription}</CardDescription>
+            <CardDescription className="leading-relaxed">
+              We use passwordless magic links. Enter your email to receive a secure sign-in link.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -126,6 +143,10 @@ export default function Login() {
                 </Button>
               </form>
             </Form>
+            <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
+              <Mail className="h-3.5 w-3.5" aria-hidden />
+              Check your inbox for a one-time sign-in link.
+            </div>
           </CardContent>
         </Card>
       </div>
