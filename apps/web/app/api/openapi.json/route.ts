@@ -6,6 +6,8 @@ import { FindFilesResponseSchema } from '../files/find-files.response';
 import { GetFileParamsSchema } from '../files/[id]/get-file.request';
 import { GetFileResponseSchema } from '../files/[id]/get-file.response';
 import { UpdateFileParamsSchema, UpdateFileRequestSchema } from '../files/[id]/update-file.request';
+import { CreateAssetRequestSchema } from '../assets/create-asset.request';
+import { CreateAssetResponseSchema } from '../assets/create-asset.response';
 
 export async function GET() {
   const document = createDocument({
@@ -84,6 +86,27 @@ export async function GET() {
             },
             '404': {
               description: 'File not found',
+            },
+          },
+        },
+      },
+      '/api/assets': {
+        post: {
+          summary: 'Create asset',
+          tags: ['Assets'],
+          requestBody: {
+            content: {
+              'application/json': { schema: CreateAssetRequestSchema },
+            },
+          },
+          responses: {
+            '201': {
+              description: '201 Created',
+              content: {
+                'application/json': {
+                  schema: CreateAssetResponseSchema,
+                },
+              },
             },
           },
         },

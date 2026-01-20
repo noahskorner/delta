@@ -88,3 +88,24 @@ model Authenticator {
   @@id([userId, credentialID])
   @@map("authenticator")
 }
+
+enum AssetType {
+  link
+  article
+  file
+  markdown
+}
+
+model Asset {
+  id          String    @id @default(cuid()) @map("id")
+  name        String    @map("name")
+  type        AssetType @map("type")
+  createdById String?   @map("created_by_id")
+  updatedById String?   @map("updated_by_id")
+  metadata    Json      @map("metadata")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("asset")
+}
