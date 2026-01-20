@@ -1,6 +1,4 @@
-import { uuid } from '@/app/utils/uuid';
 import { PRISMA } from '../../prisma';
-import { getBlobStorage } from '../../blob-storage';
 import { CreateAssetRequest } from './create-asset.request';
 import { CreateAssetResponse } from './create-asset.response';
 
@@ -8,14 +6,14 @@ type AssetMetadata = Record<string, unknown>;
 
 export class CreateAssetFacade {
   public async create(request: CreateAssetRequest): Promise<CreateAssetResponse> {
-    const metadata = request.metadata ?? {};
-    const persistedMetadata = await this.persistAssetMetadata(request.type, metadata);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const metadata: any = request.metadata ?? {};
 
     const asset = await PRISMA.asset.create({
       data: {
         name: request.name,
         type: request.type,
-        metadata: persistedMetadata,
+        metadata: metadata,
       },
       select: {
         id: true,
@@ -39,42 +37,5 @@ export class CreateAssetFacade {
       updatedAt: asset.updatedAt,
       metadata: asset.metadata as AssetMetadata,
     } satisfies CreateAssetResponse;
-  }
-
-  private async persistAssetMetadata(
-    type: CreateAssetRequest['type'],
-    metadata: AssetMetadata
-  ): Promise<AssetMetadata> {
-    if (type !== 'file') {
-      return metadata;
-    }
-
-    const fileName = this.getMetadataString(metadata, 'fileName');
-    const contentBase64 = this.getMetadataString(metadata, 'contentBase64');
-
-    if (!fileName || !contentBase64) {
-      throw new Error('File assets require metadata.fileName and metadata.contentBase64.');
-    }
-
-    const blobPath = `assets/${uuid()}/${fileName}`;
-    const blobStorage = getBlobStorage();
-    await blobStorage.put(blobPath, Buffer.from(contentBase64, 'base64'));
-
-    const { contentBase64: _contentBase64, ...rest } = metadata;
-
-    return {
-      ...rest,
-      blobPath,
-      fileName,
-    };
-  }
-
-  private getMetadataString(metadata: AssetMetadata, key: string): string | null {
-    const value = metadata[key];
-    if (typeof value === 'string' && value.trim().length > 0) {
-      return value;
-    }
-
-    return null;
   }
 }
