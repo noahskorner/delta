@@ -40,6 +40,7 @@
     "clsx": "^2.1.1",
     "codemirror": "^6.0.2",
     "database": "*",
+    "environment": "*",
     "lodash": "^4.17.21",
     "lucide-react": "^0.517.0",
     "next": "^15.5.9",
