@@ -1,4 +1,4 @@
-import { getContainerClient } from '@/app/container-client';
+import { getBlobStorage } from '@/app/blob-storage';
 import { PRISMA } from '../../../prisma';
 import { GetFileResponse } from './get-file.response';
 
@@ -19,10 +19,8 @@ export class GetFileFacade {
       },
     });
 
-    const containerClient = await getContainerClient();
-    const blobClient = containerClient.getBlobClient(file.path);
-    const downloadBlockBlobResponse = await blobClient.download();
-    const content = await this.streamToBuffer(downloadBlockBlobResponse.readableStreamBody ?? null);
+    const blobStorage = getBlobStorage();
+    const content = await blobStorage.get(file.path);
 
     return {
       id: file.id,
@@ -30,16 +28,7 @@ export class GetFileFacade {
       createdAt: file.createdAt,
       updatedAt: file.updatedAt,
       path: file.path,
-      content: content.toString(),
+      content: (content ?? Buffer.alloc(0)).toString(),
     };
-  }
-
-  private async streamToBuffer(readableStream: NodeJS.ReadableStream | null): Promise<Buffer> {
-    if (!readableStream) return Buffer.alloc(0);
-    const chunks: Buffer[] = [];
-    for await (const chunk of readableStream) {
-      chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-    }
-    return Buffer.concat(chunks);
   }
 }

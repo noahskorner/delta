@@ -1,6 +1,5 @@
-import { ContainerClient } from '@azure/storage-blob';
 import { PRISMA } from '@/app/prisma';
-import { getContainerClient } from '../../../container-client';
+import { getBlobStorage } from '../../../blob-storage';
 
 export interface UpdateFileCommand {
   id: string;
@@ -16,17 +15,16 @@ export class UpdateFileFacade {
       },
     });
 
-    const containerClient = await getContainerClient();
+    const blobStorage = getBlobStorage();
     const pathChanged = path != null && path !== file.path;
 
     if (pathChanged) {
-      await this.moveEntry({ fileId: id, filePath: file.path, newPath: path, containerClient });
+      await this.moveEntry({ fileId: id, filePath: file.path, newPath: path, blobStorage });
     }
 
     if (!file.isFolder && content !== undefined) {
       const targetPath = pathChanged ? path : file.path;
-      const blockBlobClient = containerClient.getBlockBlobClient(targetPath);
-      await blockBlobClient.upload(content ?? '', Buffer.byteLength(content ?? ''));
+      await blobStorage.put(targetPath, content ?? '');
     }
 
     if (!pathChanged) {
@@ -45,12 +43,12 @@ export class UpdateFileFacade {
     fileId,
     filePath,
     newPath,
-    containerClient,
+    blobStorage,
   }: {
     fileId: string;
     filePath: string;
     newPath: string;
-    containerClient: ContainerClient;
+    blobStorage: ReturnType<typeof getBlobStorage>;
   }) {
     if (newPath === filePath) return;
 
@@ -90,7 +88,7 @@ export class UpdateFileFacade {
       for (const move of moves.filter(
         (entry) => !entry.isFolder && entry.fromPath !== entry.toPath
       )) {
-        await this.copyBlob(containerClient, move.fromPath, move.toPath);
+        await this.copyBlob(blobStorage, move.fromPath, move.toPath);
       }
 
       await PRISMA.$transaction(
@@ -105,18 +103,18 @@ export class UpdateFileFacade {
       for (const move of moves.filter(
         (entry) => !entry.isFolder && entry.fromPath !== entry.toPath
       )) {
-        await this.deleteBlob(containerClient, move.fromPath);
+        await this.deleteBlob(blobStorage, move.fromPath);
       }
       return;
     }
 
     await this.ensurePathsAvailable([newPath], [fileId]);
-    await this.copyBlob(containerClient, filePath, newPath);
+    await this.copyBlob(blobStorage, filePath, newPath);
     await PRISMA.file.update({
       where: { id: fileId },
       data: { path: newPath },
     });
-    await this.deleteBlob(containerClient, filePath);
+    await this.deleteBlob(blobStorage, filePath);
   }
 
   private async ensurePathsAvailable(newPaths: string[], ignoreIds: string[]) {
@@ -135,25 +133,18 @@ export class UpdateFileFacade {
     }
   }
 
-  private async copyBlob(containerClient: ContainerClient, fromPath: string, toPath: string) {
+  private async copyBlob(
+    blobStorage: ReturnType<typeof getBlobStorage>,
+    fromPath: string,
+    toPath: string
+  ) {
     if (fromPath === toPath) return;
-    const source = containerClient.getBlockBlobClient(fromPath);
-    const destination = containerClient.getBlockBlobClient(toPath);
-    const download = await source.download();
-    const buffer = await this.streamToBuffer(download.readableStreamBody ?? null);
-    await destination.upload(buffer, buffer.length);
+    const buffer = await blobStorage.get(fromPath);
+    if (!buffer) return;
+    await blobStorage.put(toPath, buffer);
   }
 
-  private async deleteBlob(containerClient: ContainerClient, path: string) {
-    await containerClient.getBlockBlobClient(path).deleteIfExists();
-  }
-
-  private async streamToBuffer(readableStream: NodeJS.ReadableStream | null): Promise<Buffer> {
-    if (!readableStream) return Buffer.alloc(0);
-    const chunks: Buffer[] = [];
-    for await (const chunk of readableStream) {
-      chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-    }
-    return Buffer.concat(chunks);
+  private async deleteBlob(blobStorage: ReturnType<typeof getBlobStorage>, path: string) {
+    await blobStorage.delete(path);
   }
 }

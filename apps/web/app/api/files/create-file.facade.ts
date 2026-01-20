@@ -2,7 +2,7 @@ import { splitFileExtension } from '@/app/utils/split-file-extension';
 import { PRISMA } from '../../prisma';
 import { CreateFileRequest } from './create-file.request';
 import { CreateFileResponse } from './create-file.response';
-import { getContainerClient } from '../../container-client';
+import { getBlobStorage } from '../../blob-storage';
 
 export class CreateFileFacade {
   public async create(request: CreateFileRequest): Promise<CreateFileResponse> {
@@ -24,11 +24,10 @@ export class CreateFileFacade {
       },
     });
 
-    // Persist the file to azurite
+    // Persist the file to blob storage
     if (!request.isFolder) {
-      const containerClient = await getContainerClient();
-      const blockBlobClient = containerClient.getBlockBlobClient(file.path);
-      await blockBlobClient.upload('', 0); // Empty file
+      const blobStorage = getBlobStorage();
+      await blobStorage.put(file.path, '');
     }
 
     // Return the created file
