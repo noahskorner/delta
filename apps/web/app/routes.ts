@@ -10,7 +10,7 @@ export const ROUTES = {
   dashboard: {
     home: '/dashboard',
     course: {
-      designer: '/course/designer',
+      designer: '/dashboard/course/designer',
     },
   },
   external: {

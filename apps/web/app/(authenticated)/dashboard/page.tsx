@@ -2,13 +2,9 @@ import { ArrowRight, BookOpen, Sparkles, Target } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
+import { ROUTES } from '@/app/routes';
 
 export default function HomePage() {
   return (
@@ -37,8 +33,10 @@ export default function HomePage() {
             your first syllabus or explore community content to begin tracking progress.
           </p>
           <div className="flex flex-wrap gap-3">
-            <Button className="gap-2">
-              Generate a course <Sparkles className="size-4" />
+            <Button className="gap-2" asChild>
+              <Link href={ROUTES.dashboard.course.designer}>
+                Generate a course <Sparkles className="size-4" />
+              </Link>
             </Button>
             <Button variant="outline" className="gap-2">
               Browse courses <ArrowRight className="size-4" />
