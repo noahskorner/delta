@@ -54,7 +54,7 @@ const NAV_SECTIONS = [
   {
     label: 'AI Studio',
     items: [
-      { label: 'Generate Course', icon: Sparkles, disabled: true },
+      { label: 'Course Designer', icon: Sparkles, href: ROUTES.dashboard.course.designer },
       { label: 'Feedback Lab', icon: CircleUser, disabled: true },
     ],
   },
@@ -102,7 +102,7 @@ export function Sidebar() {
                 {section.items.map((item) => (
                   <SidebarMenuItem key={item.label}>
                     {item.href ? (
-                      <SidebarMenuButton asChild isActive={item.active}>
+                      <SidebarMenuButton asChild>
                         <Link href={item.href}>
                           <item.icon />
                           <span>{item.label}</span>

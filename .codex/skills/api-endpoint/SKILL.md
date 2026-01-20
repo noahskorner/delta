@@ -30,6 +30,7 @@ Use this skill when a request requires:
 5. Implement schema updates and migrations:
    - Keep models minimal and aligned to the spec.
    - Add enums only when they are required by the API contract.
+   - Never manually generate SQL for migrations; always run `npm --prefix packages/database run prisma:migrate:dev`.
 6. Implement the API endpoint:
    - Use shared packages (`database`, `environment`, `blob-storage`) instead of duplicating logic.
    - Validate inputs and return typed responses.

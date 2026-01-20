@@ -9,6 +9,9 @@ export const ROUTES = {
   },
   dashboard: {
     home: '/dashboard',
+    course: {
+      designer: '/course/designer',
+    },
   },
   external: {
     email: 'http://localhost:8025',
