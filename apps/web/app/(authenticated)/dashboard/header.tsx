@@ -31,10 +31,6 @@ export function Header({ email, initials }: HeaderProps) {
           <h1 className="text-lg font-semibold">Dashboard</h1>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" aria-label="Settings">
-            <Settings className="size-4" />
-          </Button>
-          <ThemeSwitcher />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex items-center gap-2 px-2">
@@ -51,6 +47,13 @@ export function Header({ email, initials }: HeaderProps) {
                 </span>
                 <span className="block truncate text-sm font-medium">{email}</span>
               </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Settings className="size-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <ThemeSwitcher />
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <LogOut className="size-4" />

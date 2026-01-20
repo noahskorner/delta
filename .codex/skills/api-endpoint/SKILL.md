@@ -48,8 +48,8 @@ Follow the existing patterns in `apps/web/app/api/assets`.
   - Co-locate schemas and facade in the same folder.
 - **Schema files (Zod + OpenAPI)**
   - Create `*.request.ts` and `*.response.ts` files per endpoint.
-  - Import Zod via `import { z } from '@/app/utils/zod';` to enable `.openapi(...)`.
-  - Add `.openapi({ title: '...' })` on each schema and add per-field `description`/`example`.
+  - Import Zod via `import { z } from '@/app/utils/zod';` to enable `.meta(...)`.
+  - Add `.meta({ title: '...' })` on each schema and add per-field `description`/`example`.
   - Expose types via `export type ... = z.infer<typeof ...Schema>;`.
 - **Facade layer**
   - Use `*.facade.ts` classes for data access and side effects.

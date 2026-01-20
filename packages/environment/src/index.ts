@@ -6,6 +6,8 @@ export interface Environment {
   EMAIL_SERVER: string;
   EMAIL_FROM: string;
   OPENAI_API_KEY: string;
+  OLLAMA_BASE_URL: string;
+  OLLAMA_MODEL: string;
 }
 
 const REQUIRED_KEYS: Array<keyof Environment> = [
@@ -16,12 +18,15 @@ const REQUIRED_KEYS: Array<keyof Environment> = [
   'EMAIL_SERVER',
   'EMAIL_FROM',
   'OPENAI_API_KEY',
+  'OLLAMA_BASE_URL',
+  'OLLAMA_MODEL',
 ];
 
 const URL_KEYS: Array<keyof Environment> = [
   'DATABASE_URL',
   'AZURITE_ENDPOINT',
   'EMAIL_SERVER',
+  'OLLAMA_BASE_URL',
 ];
 
 const EMAIL_FROM_KEY: keyof Environment = 'EMAIL_FROM';

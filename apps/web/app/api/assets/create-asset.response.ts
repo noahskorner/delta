@@ -3,37 +3,37 @@ import { AssetTypeSchema } from './create-asset.request';
 
 export const CreateAssetResponseSchema = z
   .object({
-    id: z.string().openapi({
+    id: z.string().meta({
       description: 'Unique identifier for the asset',
       example: 'ckv9f1p0w0000x8l0d6h0t1q2',
     }),
-    name: z.string().min(1).openapi({
+    name: z.string().min(1).meta({
       description: 'Display name for the asset',
       example: 'Intro to Linear Algebra',
     }),
     type: AssetTypeSchema,
-    createdById: z.string().nullable().openapi({
+    createdById: z.string().nullable().meta({
       description: 'User id that created the asset',
       example: 'ckv9f1p0w0000x8l0d6h0t1q2',
     }),
-    createdAt: z.date().openapi({
+    createdAt: z.date().meta({
       description: 'Creation timestamp of the asset',
       example: '2023-10-01T12:00:00Z',
     }),
-    updatedById: z.string().nullable().openapi({
+    updatedById: z.string().nullable().meta({
       description: 'User id that last updated the asset',
       example: 'ckv9f1p0w0000x8l0d6h0t1q2',
     }),
-    updatedAt: z.date().openapi({
+    updatedAt: z.date().meta({
       description: 'Last update timestamp of the asset',
       example: '2023-10-01T12:00:00Z',
     }),
-    metadata: z.record(z.unknown()).openapi({
+    metadata: z.record(z.string(), z.unknown()).meta({
       description: 'Type-specific asset metadata',
       example: { url: 'https://example.com/lesson' },
     }),
   })
-  .openapi({
+  .meta({
     title: 'CreateAssetResponse',
   });
 

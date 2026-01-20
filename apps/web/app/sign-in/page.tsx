@@ -2,7 +2,6 @@
 
 import { BookOpen, Bot, Flame, Mail, Sparkles, Target } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import {
@@ -17,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { signIn } from 'next-auth/react';
 import { ROUTES } from '../routes';
+import { z } from '../utils/zod';
 
 const schema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),

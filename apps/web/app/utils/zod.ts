@@ -1,2 +1,2 @@
-import 'zod-openapi/extend';
-export * as z from 'zod';
+import 'zod-openapi';
+export * as z from 'zod/v4';

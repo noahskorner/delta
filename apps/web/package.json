@@ -34,7 +34,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@uiw/codemirror-theme-vscode": "^4.25.4",
     "@uiw/react-codemirror": "^4.23.14",
-    "ai": "^5.0.114",
+    "ai": "^6.0.42",
     "blob-storage": "*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -47,6 +47,7 @@
     "next-auth": "^4.24.11",
     "next-themes": "^0.4.6",
     "nodemailer": "^7.0.11",
+    "ollama-ai-provider-v2": "^2.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.58.1",
@@ -58,8 +59,8 @@
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.1",
     "uuid": "^11.1.0",
-    "zod": "^3.25.67",
-    "zod-openapi": "^4.2.4"
+    "zod": "^4.3.5",
+    "zod-openapi": "^5.4.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
