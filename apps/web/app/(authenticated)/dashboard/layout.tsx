@@ -43,7 +43,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
@@ -103,23 +102,28 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <SidebarHeader>
           <div
             className="flex items-center justify-between gap-2 rounded-lg border
-            border-sidebar-border/70 bg-sidebar/40 px-2 py-2"
+            border-sidebar-border/70 bg-sidebar/40 px-2 py-2
+            group-data-[collapsible=icon]:justify-center
+            group-data-[collapsible=icon]:px-1.5
+            group-data-[collapsible=icon]:py-1.5
+            group-data-[collapsible=icon]:border-none
+            "
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 group-data-[collapsible=icon]:gap-0">
               <div
                 className="grid size-9 place-items-center rounded-lg bg-primary text-primary-foreground
-                shadow-sm"
+                shadow-sm group-data-[collapsible=icon]:size-8 shrink-0"
               >
                 <Sparkles className="size-4" />
               </div>
-              <div className="leading-tight">
+              <div className="leading-tight group-data-[collapsible=icon]:hidden">
                 <p className="text-sm font-semibold">delta</p>
                 <p className="text-xs text-sidebar-foreground/70">AI course studio</p>
               </div>
             </div>
             <Badge
               variant="secondary"
-              className="hidden text-[10px] uppercase tracking-wide md:flex"
+              className="hidden text-[10px] uppercase tracking-wide md:flex group-data-[collapsible=icon]:hidden"
             >
               Beta
             </Badge>
@@ -164,9 +168,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>
-        <SidebarRail />
       </Sidebar>
-      <SidebarInset>
+      <SidebarInset className="md:peer-data-[variant=inset]:m-0 md:peer-data-[variant=inset]:rounded-none md:peer-data-[variant=inset]:shadow-none">
         <header
           className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4
           backdrop-blur md:px-6"
